@@ -20,23 +20,14 @@ Not provided yet.
 
 1. Apache2 configuration
 ``` Apache 2
-<VirtualHost *:80>
-        # The ServerName directive sets the request scheme, hostname and port that
-        # the server uses to identify itself. This is used when creating
-        # redirection URLs. In the context of virtual hosts, the ServerName
-        # specifies what hostname must appear in the request's Host: header to
-        # match this virtual host. For the default virtual host (this file) this
-        # value is not decisive as it is used as a last resort host regardless.
-        # However, you must set it for any further virtual host explicitly.
-        ServerName mitto-frontend.localhost
-        DocumentRoot /home/fernando/PhpstormProjects/MittoFrontend/web
+ServerName frontend.localhost
+        DocumentRoot /yourpaht/Silex-Services-AngularJs-Json/web
         SetEnv APPLICATION_ENV "development"
-        <Directory /home/fernando/PhpstormProjects/MittoFrontend/web>
+        <Directory /yourpath/Silex-Services-AngularJs-Json/web>
                 DirectoryIndex index.php
                 AllowOverride All
                 Require all granted
         </Directory>
-</VirtualHost>
 ```
 2. Enable configurations
 a2ensite [yourfile].conf
