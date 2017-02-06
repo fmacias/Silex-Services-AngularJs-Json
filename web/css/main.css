@@ -1,0 +1,26 @@
+.mainTitle{
+    font:bold;
+    font-color:#6666ff;
+}
+.wrapper{
+    margin: 2%
+}
+div{
+    padding:5px;
+    display:block;
+    border:2px solid;
+    border-color: #6666ff;
+    margin:10px;
+}
+div div{
+    border-color:#9999ff;
+}
+div div div{
+    border-color:#ccccff;
+}
+table, th, td{
+    border: 1px solid #CCCCCC;
+}
+th,td{
+    text-align:left;
+}

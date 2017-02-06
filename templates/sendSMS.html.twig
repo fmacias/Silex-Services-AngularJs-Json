@@ -1,0 +1,46 @@
+{% extends "layout.html.twig" %}
+{% block angularApp %}ng-app="sendSmsApp"{% endblock %}
+{% block angularMinJsReference %}
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+{% endblock %}
+{% block AngularCode %}
+    var sendSmsApp = angular.module('sendSmsApp',[]);
+    sendSmsApp.controller('sendSmsCtrl',['$scope','$http',function(scope,http){
+        scope.send=function(){
+            var url = 'send.json?from='+scope.from+'&to='+scope.to+'&text='+scope.message;
+            http.get(url)
+                .success(function(data){
+                    scope.sentState=data.posibleStates[data.state];
+                });
+        }
+    }]);
+{% endblock %}
+{% block AngularController %}ng-controller="sendSmsCtrl"{% endblock %}
+{% block content %}
+    <div class="Wrapper">
+        Send Message
+        <div>
+            <form ng-submit="send()">
+                <div>
+                    <label>From</label>
+                    <input type="text" ng-model="from" required/>
+                </div>
+                <div>
+                    <label>To</label>
+                    <input type="text" ng-model="to" required/>
+                    <span>ex.: +49157325689</span>
+                </div>
+                <div>
+                    <label>Message</label>
+                    <div><textarea ng-model="message" required></textarea></div>
+                </div>
+                <div>
+                    <input type="submit"/>
+                </div>
+            </form>
+            <div>
+                <h2>{% verbatim %}{{sentState}} {% endverbatim %}</h2>
+            </div>
+        </div>
+    </div>
+{% endblock %}

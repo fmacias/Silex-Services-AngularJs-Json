@@ -1,0 +1,68 @@
+{% extends "layout.html.twig" %}
+{% block angularApp %}ng-app="statisticsApp"{% endblock %}
+{% block angularMinJsReference %}
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+{% endblock %}
+{% block AngularCode %}
+    var statisticsApp=angular.module('statisticsApp',[]);
+    statisticsApp.controller("statisticsCtrl", ["$http", "$scope","$filter", function(http, scope, filter) {
+        scope.dateFrom={
+            value:filter('date')(new Date(2010,01,01),'yyyy-MM-ddTHH:mm:ss')
+        };
+        scope.dateTo={
+            value:filter('date')(new Date(3000,01,01),'yyyy-MM-ddTHH:mm:ss')
+        };
+        scope.mccList={
+            value:'262,232'
+        };
+        scope.requestData=function(){
+            http.get('statistics.json?dateFrom='+scope.dateFrom.value+'&dateTo='+scope.dateTo.value+'&mccList='+scope.mccList.value)
+                .success(function (data) {
+                    scope.sentMessages = data;
+            });
+        }
+        scope.requestData();
+    }]);
+{% endblock %}
+{% block AngularController %}ng-controller="statisticsCtrl"{% endblock %}
+{% block content %}
+<div class="Wrapper">
+    <span class="mainTitle">View Sent Messages</span>
+    <div class="QueryByDate">
+        <dib>Query Results:</dib>
+        <form ng-submit="requestData()">
+            <div class="formFields">
+                <label class="formFieldsInputHeader">Date From</label>
+                <input type="datetime-local" id="dateFrom" name="dateFrom" ng-model="dateFrom.value" placeholder="yyyy-MM-ddTHH:mm:ss"
+                       min="1900-01-01T00:00:00" max="3000-12-31T00:00:00" required/>
+                <label class="formFieldsInputHeader">Date To</label>
+                <input type="datetime-local" id="dateTo" name="dateTo" ng-model="dateTo.value" placeholder="yyyy-MM-ddTHH:mm:ss"
+                       min="1900-01-01T00:00:00" max="3000-12-31T00:00:00" required/>
+                <label>MCC list</label>
+                <input type="text" name="mccList" ng-model="mccList.value" />
+                <input type="submit" value="search"/>
+            </div>
+        </form>
+    </div>
+    <div class="dataContainer">
+    <table>
+        <tr class="tableHeader">
+            <th>DateTime</th>
+            <th>MCC</th>
+            <th>Country Name</th>
+            <th>From</th>
+            <th>To</th>
+            <th>PricePerSms</th>
+        </tr>
+        <tr ng-repeat="sentMessage in sentMessages">
+            <td>{% verbatim %}{{sentMessage.Day}} {% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.MCC}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.CountryName}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.PricePerSms}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.Count}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.TotalPrice}}{% endverbatim %}</td>
+        </tr>
+    </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "layout.html.twig" %}
+{% block angularApp %}ng-app="sentSmsApp"{% endblock %}
+{% block angularMinJsReference %}
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+{% endblock %}
+{% block AngularCode %}
+    var sentSmsApp=angular.module('sentSmsApp',[]);
+    sentSmsApp.controller("SentSmsCtrl", ["$http", "$scope","$filter", function(http, scope, filter) {
+        scope.skip= 0;
+        scope.take = 5;
+        scope.dateFrom={
+            value:filter('date')(new Date(2010,01,01),'yyyy-MM-ddTHH:mm:ss')
+        };
+        scope.dateTo={
+            value:filter('date')(new Date(3000,01,01),'yyyy-MM-ddTHH:mm:ss')
+        };
+
+        scope.requestPage=function(){
+            http.get('sent.json?dateTimeFrom='+scope.dateFrom.value+'&dateTimeTo='+scope.dateTo.value+'&skip='+scope.skip+'&take='+scope.take)
+            .success(function (data) {
+                scope.sentMessages = data;
+            });
+        }
+        scope.requestPage();
+
+        scope.getNext=function(){
+            scope.skip+= scope.take;
+                scope.requestPage();
+        }
+
+        scope.getPrev=function(){
+            scope.skip-= scope.take;
+            scope.skip=(scope.skip<0)?0:scope.skip;
+            scope.requestPage();
+        }
+    }]);
+{% endblock %}
+{% block AngularController %}ng-controller="SentSmsCtrl"{% endblock %}
+{% block content %}
+<div class="Wrapper">
+    <span class="mainTitle">View Sent Messages</span>
+    <div class="QueryByDate">
+        <dib>Query Results:</dib>
+        <form ng-submit="requestPage()">
+            <div class="formFields">
+                <label class="formFieldsInputHeader">Date From</label>
+                <input type="datetime-local" id="dateFrom" name="dateFrom" ng-model="dateFrom.value" placeholder="yyyy-MM-dd HH:mm:ss"
+                       min="1900-01-01T00:00:00" max="3000-12-31T00:00:00" required/>
+                <label class="formFieldsInputHeader">Date To</label>
+                <input type="datetime-local" id="dateTo" name="dateTo" ng-model="dateTo.value" placeholder="yyyy-MM-dd HH:mm:ss"
+                       min="1900-01-01T00:00:00" max="3000-12-31T00:00:00" required/>
+                <input type="submit" value="search"/>
+            </div>
+        </form>
+    </div>
+    <div class="pagination">
+        <span>Pagination <input type="number" ng-model="take" ng-change="requestPage()"/></span>
+        <a href="" ng-click="getPrev()"> << </a>
+        <span>{% verbatim %}From row {{skip}} view next {{take}}  {% endverbatim %}</span>
+        <a href="" ng-click="getNext()"> >></a>
+    </div>
+    <div class="dataContainer">
+    <table>
+        <tr class="tableHeader">
+            <th>DateTime</th>
+            <th>MCC</th>
+            <th>Country Name</th>
+            <th>From</th>
+            <th>To</th>
+            <th>PricePerSms</th>
+        </tr>
+        <tr ng-repeat="sentMessage in sentMessages | orderBy:'DateTime'">
+            <td>{% verbatim %}{{sentMessage.DateTime}} {% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.MCC}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.CountryName}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.From}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.To}}{% endverbatim %}</td>
+            <td>{% verbatim %}{{sentMessage.PricePerSms}}{% endverbatim %}</td>
+        </tr>
+    </table>
+    </div>
+</div>
+{% endblock %}
