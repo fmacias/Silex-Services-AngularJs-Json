@@ -26,6 +26,10 @@ Not provided yet.
 ```
 # web server
 
+0. Mode Rewrite is required
+```
+ $sudo a2enmod rewrite
+```
 1. Apache2 configuration
 ``` Apache
 <Virtualhost *:80>
