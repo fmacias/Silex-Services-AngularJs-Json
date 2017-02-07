@@ -7,7 +7,7 @@ You will find the following:
 
 1. How to define Services
 2. Curl abstraction. Request data with cURL.
-3. Basic usage of AngualJs.
+3. Basic usage of AngularJs.
 4. Twig with AngularJs
 
 # Creating a Silex Application
