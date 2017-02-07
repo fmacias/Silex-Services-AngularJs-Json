@@ -4,6 +4,7 @@ Silex sample app that retrieves the data from services as Json.
 Front-end with basic AngularJs implementation and Twig
 
 You will find the following:
+
 1. How to define Services
 2. Curl abstraction. Request data with cURL.
 3. Basic usage of AngualJs.
@@ -19,9 +20,10 @@ Not provided yet.
 
 # Installation
 
+```
 1. $composer install
 2. edit Config/prod.php file and set up the configurations.
-
+```
 # web server
 
 1. Apache2 configuration
@@ -38,11 +40,14 @@ Not provided yet.
 </VirturalHost>
 ```
 2. Enable configurations
+```
 a2ensite [yourfile].conf
-
-3. set your virtual hos at 
+```
+3. set your virtual hos at
+ ```
 /etc/hosts
-
+```
 4. reload apache2
+```
 service apache2 reload
-
+```
